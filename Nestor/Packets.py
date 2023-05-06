@@ -3,6 +3,8 @@
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
 import json
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 
 class HostToCardPacket:

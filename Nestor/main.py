@@ -5,7 +5,7 @@
 from datetime import datetime
 from Report import Report
 from Shared import VERSION
-from ParsedPacket import ParsedPacket
+from Packets import parsePackets
 
 
 def intro():
@@ -34,8 +34,7 @@ def intro():
 def main():
     intro()
     report = Report(datetime.now().strftime("%B %d, %Y at %H:%M:%S"), "Charging RavKav", "Martin Alebachew")
-    report.addRecord(ParsedPacket("in"))
-    report.addRecord(ParsedPacket("out"))
+    report.addRecords(parsePackets("/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json"))
     report.save("/Users/martin/Desktop/generated.pdf")
 
 

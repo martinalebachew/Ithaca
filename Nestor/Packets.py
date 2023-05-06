@@ -57,3 +57,5 @@ def parsePackets(filename):
                 parsedPackets.append(HostToCardPacket(i, cardLayer))
             elif "iso7816.atr" not in cardLayer:  # Skip ATR
                 parsedPackets.append(CardToHostPacket(i, cardLayer))
+
+    return parsedPackets

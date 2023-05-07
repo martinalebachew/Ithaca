@@ -8,7 +8,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 
 
-def SafeAccessAttr(dictionary, key, defaultValue="*", nestingKey=">"):
+def SafeAccessAttr(dictionary, key, defaultValue="", nestingKey=">"):
     value = dictionary
     path = [key] if nestingKey is None else key.split(nestingKey)
 
@@ -24,23 +24,23 @@ class HostToCardPacket:
     def __init__(self, index, cardLayer):
         self.no = str(index + 1)
 
-        self.cla = SafeAccessAttr(cardLayer, "iso7816.apdu.cla")
-        self.ins = SafeAccessAttr(cardLayer, "iso7816.apdu.ins")
-        self.p1 = SafeAccessAttr(cardLayer, "Parameters>iso7816.apdu.p1")
-        self.p2 = SafeAccessAttr(cardLayer, "Parameters>iso7816.apdu.p2")
-        self.lc = SafeAccessAttr(cardLayer, "iso7816.apdu.lc")
+        self.cla = SafeAccessAttr(cardLayer, "iso7816.apdu.cla")[2:]
+        self.ins = SafeAccessAttr(cardLayer, "iso7816.apdu.ins")[2:]
+        self.p1 = SafeAccessAttr(cardLayer, "Parameters>iso7816.apdu.p1")[2:]
+        self.p2 = SafeAccessAttr(cardLayer, "Parameters>iso7816.apdu.p2")[2:]
+        self.lc = SafeAccessAttr(cardLayer, "iso7816.apdu.lc")[2:]
         self.data = SafeAccessAttr(cardLayer, "iso7816.apdu.body")
-        self.le = SafeAccessAttr(cardLayer, "iso7816.apdu.le")
-        self.serialized = (self.no, "H->C", self.cla, self.ins, self.p1, self.p2, self.lc, self.data, self.le)
+        self.le = SafeAccessAttr(cardLayer, "iso7816.apdu.le")[2:]
+        self.serialized = (self.no, "H>C", self.cla, self.ins, self.p1, self.p2, self.lc, self.data, self.le)
 
 
 class CardToHostPacket:
     def __init__(self, index, cardLayer):
         self.no = str(index + 1)
         self.data = SafeAccessAttr(cardLayer, "iso7816.apdu.body")
-        self.sw1 = SafeAccessAttr(cardLayer, "iso7816.apdu.sw1")
-        self.sw2 = SafeAccessAttr(cardLayer, "iso7816.apdu.sw2")
-        self.serialized = (self.no, "C->H", self.data, self.sw1, self.sw2)
+        self.sw1 = SafeAccessAttr(cardLayer, "iso7816.apdu.sw1")[2:]
+        self.sw2 = SafeAccessAttr(cardLayer, "iso7816.apdu.sw2")[2:]
+        self.serialized = (self.no, "C>H", self.data, self.sw1, self.sw2)
 
 
 def parsePackets(filename):

@@ -57,7 +57,7 @@ class Report:
             col_widths=HEADERS[direction]["widths"]
         ) as table:
             table.row(HEADERS[direction]["titles"])  # Header row
-            table.row(["" for junk in range(0, len(HEADERS[direction]["titles"]))])  # Data row
+            table.row([packet.serialized[i] for i in range(0, len(HEADERS[direction]["titles"]))])  # Data row
 
         with self.__pdf.table(
                 first_row_as_headings=False,

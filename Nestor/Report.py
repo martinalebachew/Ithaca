@@ -3,7 +3,7 @@
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
 from fpdf import FPDF
-from Shared import VERSION, HEADERS, TABLE_WIDTH
+from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS
 from Packets import HostToCardPacket, CardToHostPacket
 
 
@@ -63,7 +63,10 @@ class Report:
                 first_row_as_headings=False,
                 width=TABLE_WIDTH
         ) as table:
-            table.row(["NOTES..."])  # Notes row
+            if direction == "HostToCard":
+                instructionType = INSTRUCTIONS[packet.ins] if packet.ins in INSTRUCTIONS.keys() else "N/A"
+                NOTES_ROW = f"Instruction Type: {instructionType}"
+                table.row([NOTES_ROW])  # Notes row
 
     def save(self, filepath):
         self.__pdf.output(filepath)

@@ -14,8 +14,21 @@ class Report:
         # Create a document
         self.__pdf = FPDF()
         self.__pdf.add_page()
-        self.__pdf.set_font("Courier", size=10)
+        self.__resetFont()
         self.__addInfo(date, title, author)
+
+    def __resetFont(self):
+        self.__pdf.set_font("Courier", size=10)
+        self.__setFontBlack()
+
+    def __setFontBold(self):
+        self.__pdf.set_font("Courier", "B", size=10)
+
+    def __setFontRed(self):
+        self.__pdf.set_text_color(220, 40, 40)
+
+    def __setFontBlack(self):
+        self.__pdf.set_text_color(0, 0, 0)
 
     def __addText(self, text, upperPadding=0, fontSize=None):
         if fontSize is not None:
@@ -59,14 +72,19 @@ class Report:
             table.row(HEADERS[direction]["titles"])  # Header row
             table.row([packet.serialized[i] for i in range(0, len(HEADERS[direction]["titles"]))])  # Data row
 
+        # Notes row
         with self.__pdf.table(
                 first_row_as_headings=False,
                 width=TABLE_WIDTH
         ) as table:
             if direction == "HostToCard":
-                instructionType = INSTRUCTIONS[packet.ins] if packet.ins in INSTRUCTIONS.keys() else "N/A"
-                NOTES_ROW = f"Instruction Type: {instructionType}"
-                table.row([NOTES_ROW])  # Notes row
+                if packet.ins in INSTRUCTIONS.keys():
+                    table.row([f"Instruction type: {INSTRUCTIONS[packet.ins]}"])
+                else:
+                    self.__setFontRed()
+                    self.__setFontBold()
+                    table.row(["Failed to analyse proprietary instruction!"])  # Notes row
+                    self.__resetFont()
 
     def save(self, filepath):
         self.__pdf.output(filepath)

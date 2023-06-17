@@ -22,6 +22,7 @@ def SafeAccessAttr(dictionary, key, defaultValue="", nestingKey=">"):
 
 
 class HostToCardPacket:
+
     def __init__(self, index, cardLayer):
         self.no = str(index + 1)
 
@@ -46,6 +47,7 @@ class HostToCardPacket:
 
 
 class CardToHostPacket:
+
     def __init__(self, index, cardLayer):
         self.no = str(index + 1)
         self.data = SafeAccessAttr(cardLayer, "iso7816.apdu.body")

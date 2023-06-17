@@ -11,6 +11,7 @@ from Shared import VERSION
 
 
 class Report:
+
     def __init__(self, date, title, author):
         self.__posY = 0  # Stores the current y pos in document
 
@@ -68,23 +69,23 @@ class Report:
 
     def __addRecordImpl(self, direction, packet):
         with self.__pdf.table(
-            first_row_as_headings=True,
-            width=TABLE_WIDTH,
-            col_widths=HEADERS[direction]["widths"],
+                first_row_as_headings=True,
+                width=TABLE_WIDTH,
+                col_widths=HEADERS[direction]["widths"],
         ) as table:
             table.row(HEADERS[direction]["titles"])  # Header row
-            table.row(
-                [
-                    packet.serialized[i]
-                    for i in range(0, len(HEADERS[direction]["titles"]))
-                ]
-            )  # Data row
+            table.row([
+                packet.serialized[i]
+                for i in range(0, len(HEADERS[direction]["titles"]))
+            ])  # Data row
 
         # Notes row
-        with self.__pdf.table(first_row_as_headings=False, width=TABLE_WIDTH) as table:
+        with self.__pdf.table(first_row_as_headings=False,
+                              width=TABLE_WIDTH) as table:
             if direction == "HostToCard":
                 if packet.ins in INSTRUCTIONS.keys():
-                    table.row([f"Instruction type: {INSTRUCTIONS[packet.ins]}"])
+                    table.row(
+                        [f"Instruction type: {INSTRUCTIONS[packet.ins]}"])
                 else:
                     self.__setFontRed()
                     self.__setFontBold()
@@ -97,6 +98,8 @@ class Report:
 
 
 if __name__ == "__main__":
-    print("Percentage sum of [in] table widths: ", sum(HEADERS["in"]["widths"]), "%")
-    print("Percentage sum of [out] table widths: ", sum(HEADERS["out"]["widths"]), "%")
+    print("Percentage sum of [in] table widths: ",
+          sum(HEADERS["in"]["widths"]), "%")
+    print("Percentage sum of [out] table widths: ",
+          sum(HEADERS["out"]["widths"]), "%")
     print("Values other than 100% might cause unexpected behavior.")

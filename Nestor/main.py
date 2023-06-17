@@ -9,8 +9,7 @@ from Shared import VERSION
 
 
 def intro():
-    print(
-        f"""
+    print(f"""
          ,--.
        ,--.'|                        ___
    ,--,:  : |                      ,--.'|_
@@ -29,8 +28,7 @@ def intro():
       RavKav Traffic Analysis Reports | Project Ithaca
                (C) Martin Alebachew, 2023
                        Version {VERSION}
-"""
-    )
+""")
 
 
 def main():
@@ -41,8 +39,8 @@ def main():
         "Martin Alebachew",
     )
     report.addRecords(
-        parsePackets("/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json")
-    )
+        parsePackets(
+            "/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json"))
     report.save("/Users/martin/Desktop/generated.pdf")
 
 

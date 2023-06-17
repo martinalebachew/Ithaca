@@ -70,7 +70,8 @@ class Report:
             col_widths=HEADERS[direction]["widths"]
         ) as table:
             table.row(HEADERS[direction]["titles"])  # Header row
-            table.row([packet.serialized[i] for i in range(0, len(HEADERS[direction]["titles"]))])  # Data row
+            table.row([packet.serialized[i] for i in range(
+                0, len(HEADERS[direction]["titles"]))])  # Data row
 
         # Notes row
         with self.__pdf.table(
@@ -79,11 +80,13 @@ class Report:
         ) as table:
             if direction == "HostToCard":
                 if packet.ins in INSTRUCTIONS.keys():
-                    table.row([f"Instruction type: {INSTRUCTIONS[packet.ins]}"])
+                    table.row(
+                        [f"Instruction type: {INSTRUCTIONS[packet.ins]}"])
                 else:
                     self.__setFontRed()
                     self.__setFontBold()
-                    table.row(["Failed to analyse proprietary instruction!"])  # Notes row
+                    # Notes row
+                    table.row(["Failed to analyse proprietary instruction!"])
                     self.__resetFont()
 
     def save(self, filepath):
@@ -91,6 +94,8 @@ class Report:
 
 
 if __name__ == "__main__":
-    print("Percentage sum of [in] table widths: ", sum(HEADERS["in"]["widths"]), "%")
-    print("Percentage sum of [out] table widths: ", sum(HEADERS["out"]["widths"]), "%")
+    print("Percentage sum of [in] table widths: ",
+          sum(HEADERS["in"]["widths"]), "%")
+    print("Percentage sum of [out] table widths: ",
+          sum(HEADERS["out"]["widths"]), "%")
     print("Values other than 100% might cause unexpected behavior.")

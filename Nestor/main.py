@@ -33,8 +33,10 @@ def intro():
 
 def main():
     intro()
-    report = Report(datetime.now().strftime("%B %d, %Y at %H:%M:%S"), "Charging RavKav", "Martin Alebachew")
-    report.addRecords(parsePackets("/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json"))
+    report = Report(datetime.now().strftime(
+        "%B %d, %Y at %H:%M:%S"), "Charging RavKav", "Martin Alebachew")
+    report.addRecords(parsePackets(
+        "/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json"))
     report.save("/Users/martin/Desktop/generated.pdf")
 
 

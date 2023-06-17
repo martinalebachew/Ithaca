@@ -2,10 +2,10 @@
 # (C) Martin Alebachew, 2023
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
+from scapy.all import *
 import json
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
-from scapy.all import *
 
 
 def SafeAccessAttr(dictionary, key, defaultValue="", nestingKey=">"):
@@ -31,7 +31,8 @@ class HostToCardPacket:
         self.lc = SafeAccessAttr(cardLayer, "iso7816.apdu.lc")[2:]
         self.data = SafeAccessAttr(cardLayer, "iso7816.apdu.body")
         self.le = SafeAccessAttr(cardLayer, "iso7816.apdu.le")[2:]
-        self.serialized = (self.no, "H>C", self.cla, self.ins, self.p1, self.p2, self.lc, self.data, self.le)
+        self.serialized = (self.no, "H>C", self.cla, self.ins,
+                           self.p1, self.p2, self.lc, self.data, self.le)
 
 
 class CardToHostPacket:

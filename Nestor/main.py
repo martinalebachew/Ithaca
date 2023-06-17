@@ -3,9 +3,10 @@
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
 from datetime import datetime
+
+from Packets import parsePackets
 from Report import Report
 from Shared import VERSION
-from Packets import parsePackets
 
 
 def intro():

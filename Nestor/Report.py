@@ -3,8 +3,8 @@
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
 from fpdf import FPDF
-from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS
-from Packets import HostToCardPacket, CardToHostPacket
+from Packets import CardToHostPacket, HostToCardPacket
+from Shared import HEADERS, INSTRUCTIONS, TABLE_WIDTH, VERSION
 
 
 class Report:

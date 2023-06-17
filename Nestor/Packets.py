@@ -2,9 +2,10 @@
 # (C) Martin Alebachew, 2023
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
-from scapy.all import *
 import json
 import logging
+
+from scapy.all import *
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 

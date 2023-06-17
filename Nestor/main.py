@@ -9,7 +9,8 @@ from Packets import parsePackets
 
 
 def intro():
-    print(f"""                                      
+    print(
+        f"""                                      
          ,--.                                                  
        ,--.'|                        ___                       
    ,--,:  : |                      ,--.'|_                     
@@ -28,17 +29,22 @@ def intro():
       RavKav Traffic Analysis Reports | Project Ithaca
                (C) Martin Alebachew, 2023
                        Version {VERSION}
-""")
+"""
+    )
 
 
 def main():
     intro()
-    report = Report(datetime.now().strftime(
-        "%B %d, %Y at %H:%M:%S"), "Charging RavKav", "Martin Alebachew")
-    report.addRecords(parsePackets(
-        "/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json"))
+    report = Report(
+        datetime.now().strftime("%B %d, %Y at %H:%M:%S"),
+        "Charging RavKav",
+        "Martin Alebachew",
+    )
+    report.addRecords(
+        parsePackets("/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.json")
+    )
     report.save("/Users/martin/Desktop/generated.pdf")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

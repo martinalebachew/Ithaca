@@ -1,10 +1,13 @@
 # Report.py
 # (C) Martin Alebachew, 2023
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
-
 from fpdf import FPDF
-from Packets import CardToHostPacket, HostToCardPacket
-from Shared import HEADERS, INSTRUCTIONS, TABLE_WIDTH, VERSION
+from Packets import CardToHostPacket
+from Packets import HostToCardPacket
+from Shared import HEADERS
+from Shared import INSTRUCTIONS
+from Shared import TABLE_WIDTH
+from Shared import VERSION
 
 
 class Report:

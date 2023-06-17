@@ -1,7 +1,6 @@
 # main.py
 # (C) Martin Alebachew, 2023
 # Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
-
 from datetime import datetime
 
 from Packets import parsePackets

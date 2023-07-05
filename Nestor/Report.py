@@ -5,6 +5,7 @@
 from fpdf import FPDF
 from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS
 from Packets import HostToCardPacket, CardToHostPacket
+from Utils import hexify
 
 
 class Report:
@@ -78,8 +79,8 @@ class Report:
                 width=TABLE_WIDTH
         ) as table:
             if direction == "HostToCard":
-                if packet.ins in INSTRUCTIONS.keys():
-                    table.row([f"Instruction type: {INSTRUCTIONS[packet.ins]}"])
+                if hexify(packet.ins) in INSTRUCTIONS.keys():
+                    table.row([f"Instruction type: {INSTRUCTIONS[hexify(packet.ins)]}"])
                 else:
                     self.__setFontRed()
                     self.__setFontBold()

@@ -82,7 +82,7 @@ class Report:
         ) as table:
             if direction == "HostToCard":
                 if hexify(packet.ins) in INSTRUCTIONS.keys():
-                    table.row([INSTRUCTIONS[hexify(packet.ins)]])
+                    table.row([INSTRUCTIONS[hexify(packet.ins)] + (" (PROPRIETARY)" if packet.cla != b'\x00' else " (ISO/IEC 7816)")])
                 else:
                     self.__setFontRed()
                     self.__setFontBold()

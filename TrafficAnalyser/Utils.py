@@ -2,7 +2,6 @@
 # (C) Martin Alebachew, 2023
 
 from Shared import RESPONSES
-import binascii
 
 HEX_DELIMITER = ":"
 

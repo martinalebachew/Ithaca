@@ -27,7 +27,6 @@ class HostToCardPacket:
                 self.lc = rawData[4:5]
                 self.data = rawData[5:5 + int.from_bytes(self.lc, "little")]
                 self.le = rawData[5 + int.from_bytes(self.lc, "little"):]
-
             else:
                 # Two bytes at lc + 1 represent data length
                 self.lc = rawData[5:7]

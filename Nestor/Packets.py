@@ -27,7 +27,6 @@ class HostToCardPacket:
                 self.lc = rawData[4:5]
                 self.data = rawData[5:5 + int.from_bytes(self.lc, "little")]
                 self.le = rawData[5 + int.from_bytes(self.lc, "little"):]
-                self.le = self.le if self.le else ""
 
             else:
                 # Two bytes at lc + 1 represent data length
@@ -35,7 +34,13 @@ class HostToCardPacket:
                 self.data = rawData[7:7 + int.from_bytes(self.lc, "little")]
                 self.le = rawData[7 + int.from_bytes(self.lc, "little"):]
 
-            self.le = self.le if self.le else ""  # Make sure le is properly initialized
+            if self.lc and not self.data:
+                # Treat a case where only le is passed
+                self.le = self.lc
+                self.lc = self.data = ""
+            else:
+                # Make sure le is properly initialized
+                self.le = self.le if self.le else ""
 
         # Format data for the report
         self.serialized = [self.no, "H>C", self.cla, self.ins, self.p1, self.p2, self.lc, self.data, self.le]

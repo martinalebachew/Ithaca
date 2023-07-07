@@ -109,6 +109,6 @@ class Report:
 
 
 if __name__ == "__main__":
-    print("Percentage sum of [in] table widths: ", sum(HEADERS["in"]["widths"]), "%")
-    print("Percentage sum of [out] table widths: ", sum(HEADERS["out"]["widths"]), "%")
-    print("Values other than 100% might cause unexpected behavior.")
+    print("Percentage sum of C>H table widths:", sum(HEADERS["CardToHost"]["widths"]), "%")
+    print("Percentage sum of H>C table widths:", sum(HEADERS["HostToCard"]["widths"]), "%")
+    print("Values other than 100.0 % might cause unexpected behavior.")

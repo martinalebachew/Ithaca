@@ -1,6 +1,5 @@
 # Packets.py
 # (C) Martin Alebachew, 2023
-# Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)

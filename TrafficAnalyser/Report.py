@@ -1,6 +1,5 @@
 # Report.py
 # (C) Martin Alebachew, 2023
-# Nestor — RavKav Traffic Analysis Reports [ PROJECT ITHACA ]
 
 from fpdf import FPDF
 from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS

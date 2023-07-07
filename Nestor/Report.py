@@ -28,6 +28,9 @@ class Report:
     def __setFontRed(self):
         self.__pdf.set_text_color(220, 40, 40)
 
+    def __setFontGreen(self):
+        self.__pdf.set_text_color(93, 187, 99)
+
     def __setFontBlack(self):
         self.__pdf.set_text_color(0, 0, 0)
 
@@ -80,11 +83,25 @@ class Report:
         ) as table:
             if direction == "HostToCard":
                 if hexify(packet.ins) in INSTRUCTIONS.keys():
-                    table.row([f"Instruction type: {INSTRUCTIONS[hexify(packet.ins)]}"])
+                    table.row([INSTRUCTIONS[hexify(packet.ins)]])
                 else:
                     self.__setFontRed()
                     self.__setFontBold()
-                    table.row(["Failed to analyse proprietary instruction!"])  # Notes row
+                    table.row(["Failed to analyse proprietary instruction!"])
+                    self.__resetFont()
+                    
+            elif direction == "CardToHost":
+                if packet.sw1 == b'\x90' and packet.sw2 == b'\x00':
+                    self.__setFontGreen()
+                    self.__setFontBold()
+                    table.row(["OK"])
+                    self.__resetFont()
+                elif packet.sw1 == b'\x61':
+                    table.row([f"Response available: 0x{hexify(packet.sw2)} bytes ({int.from_bytes(packet.sw2, 'little')}d)"])
+                else:
+                    self.__setFontRed()
+                    self.__setFontBold()
+                    table.row(["Failed to analyse card response!"])
                     self.__resetFont()
 
     def save(self, filepath):

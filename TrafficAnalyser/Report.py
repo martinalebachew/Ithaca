@@ -2,7 +2,7 @@
 # (C) Martin Alebachew, 2023
 
 from fpdf import FPDF
-from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS
+from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS, RESPONSE_COLOR, COLOR_SCHEME
 from Packets import HostToCardPacket, CardToHostPacket
 from Utils import hexify, lookupResponse
 
@@ -24,11 +24,17 @@ class Report:
     def __setFontBold(self):
         self.__pdf.set_font("Courier", "B", size=10)
 
+    def __setFontColor(self, colorName):
+        self.__pdf.set_text_color(*COLOR_SCHEME[colorName])
+
+    def __setResponseColor(self, status):
+        self.__setFontColor(RESPONSE_COLOR[status].upper())
+
     def __setFontRed(self):
-        self.__pdf.set_text_color(220, 40, 40)
+        self.__pdf.set_text_color(*COLOR_SCHEME["RED"])
 
     def __setFontGreen(self):
-        self.__pdf.set_text_color(93, 187, 99)
+        self.__pdf.set_text_color(*COLOR_SCHEME["GREEN"])
 
     def __setFontBlack(self):
         self.__pdf.set_text_color(0, 0, 0)
@@ -91,13 +97,13 @@ class Report:
                     
             elif direction == "CardToHost":
                 response = lookupResponse(packet.sw1, packet.sw2)
-                if response:
-                    table.row([response])
-                else:
-                    self.__setFontRed()
-                    self.__setFontBold()
-                    table.row(["Failed to analyse card response!"])
-                    self.__resetFont()
+                status = response[response.find("[") + 1:response.find("]")] if response else "Error"
+                response = response if response else "Failed to analyse card response!"
+
+                self.__setResponseColor(status)
+                self.__setFontBold()
+                table.row([response])
+                self.__resetFont()
 
     def save(self, filepath):
         self.__pdf.output(filepath)

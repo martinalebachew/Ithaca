@@ -16,6 +16,21 @@ HEADERS = {
     }
 }
 
+RESPONSE_COLOR = {
+    "Unknown": "BLACK",
+    "Success": "GREEN",
+    "Info": "BLACK",
+    "Warning": "YELLOW",
+    "Error": "RED",
+}
+
+COLOR_SCHEME = {
+    "BLACK": (0, 0, 0),
+    "GREEN": (93, 187, 99),
+    "RED": (220, 40, 40),
+    "YELLOW": (255, 191, 0)
+}
+
 # https://www.digitalwhisper.co.il/files/Zines/0x7C/DW124-2-RavKavRE.pdf
 INSTRUCTIONS = {
     "04": "DEACTIVATE FILE",
@@ -171,7 +186,7 @@ RESPONSES = {
     "6BXX": "[Error] Reference incorrect (procedure byte), (ISO 7816-3)",
     "6C——": "[Error] Wrong length Le",
     "6C00": "[Error] Incorrect P3 length",
-    "6CXX": "[Error] Bad length value in Le; 'xx' is the correct exact Le",
+    "6CXX": "[Error] Bad length value in Le; [SW2] is the correct exact Le",
     "6D——": "[Error] Unknown",
     "6D00": "[Error] Instruction code not supported or invalid",
     "6DXX": "[Error] Instruction code not programmed or invalid (procedure byte), (ISO 7816-3)",

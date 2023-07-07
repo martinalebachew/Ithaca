@@ -4,7 +4,7 @@
 from fpdf import FPDF
 from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS
 from Packets import HostToCardPacket, CardToHostPacket
-from Utils import hexify
+from Utils import hexify, lookupResponse
 
 
 class Report:
@@ -90,13 +90,9 @@ class Report:
                     self.__resetFont()
                     
             elif direction == "CardToHost":
-                if packet.sw1 == b'\x90' and packet.sw2 == b'\x00':
-                    self.__setFontGreen()
-                    self.__setFontBold()
-                    table.row(["OK"])
-                    self.__resetFont()
-                elif packet.sw1 == b'\x61':
-                    table.row([f"Response available: 0x{hexify(packet.sw2)} bytes ({int.from_bytes(packet.sw2, 'little')}d)"])
+                response = lookupResponse(packet.sw1, packet.sw2)
+                if response:
+                    table.row([response])
                 else:
                     self.__setFontRed()
                     self.__setFontBold()

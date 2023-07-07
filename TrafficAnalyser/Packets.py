@@ -68,10 +68,12 @@ def sanitize(rawData):
     if urbLength < 23:  # Invalid URB header
         raise "Unable to fetch URB data!"
     elif urbLayer[22] == 0x03:  # Make sure packet type is URB_BULK
-        rawData = rawData[urbLength + 10:]  # Throw URB and CCID layers
-        if len(rawData) > 0:
+        rawData = rawData[urbLength:]  # Throw URB layer
+
+        # Make sure packet contains ISO/IEC 7816 message
+        if len(rawData) > 10 and rawData[0] in [0x80, 0x6f]:
             # Direction flag: MSB on for IN, off for OUT
-            return "IN" if urbLayer[21] >= 80 else "OUT", rawData
+            return "IN" if urbLayer[21] >= 80 else "OUT", rawData[10:]  # Throw CCID layer
 
     return None, None
 

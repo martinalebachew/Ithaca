@@ -1,7 +1,7 @@
 # Shared.py
 # (C) Martin Alebachew, 2023
 
-VERSION = "0.1"
+VERSION = "1.0.0"
 TABLE_WIDTH = 190
 
 HEADERS = {

@@ -5,21 +5,33 @@ from datetime import datetime
 from Report import Report
 from Shared import VERSION
 from Packets import parsePackets
+from os.path import expanduser
 
 
 def intro():
     print(f"Traffic Analyser {VERSION}")
     print("RavKav Traffic Analysis Reports")
-    print("(C) Martin Alebachew, 2023")
+    print("(C) Martin Alebachew, 2023\n")
 
 
 def main():
     intro()
-    report = Report(datetime.now().strftime("%B %d, %Y at %H:%M:%S"), "Charging RavKav", "Martin Alebachew")
-    recordedPackets = parsePackets("/Users/martin/Desktop/Ithaca Captures/Ithaca_charging.pcap")
+
+    print("Generating report...")
+    timestamp = datetime.now().strftime("%B %d, %Y at %H:%M:%S")
+    title = "Charging RavKav"
+    author = "Martin Alebachew"
+
+    pcap_filename = "/Users/martin/Documents/Other/Ithaca Captures/Ithaca_charging.pcap"
+    pdf_filename = expanduser("~/Desktop/generated.pdf")
+
+    report = Report(timestamp, title, author)
+    recordedPackets = parsePackets(pcap_filename)
     report.addATRScan(recordedPackets[0])
     report.addRecords(recordedPackets[1:])
-    report.save("/Users/martin/Desktop/generated.pdf")
+    report.save(pdf_filename)
+
+    print(f"Saved to {pdf_filename}")
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 # Utils.py
 # (C) Martin Alebachew, 2023
 
-from Shared import RESPONSES
+from Shared import RESPONSES, CHIP_TYPE, APPLICATION, SOFTWARE_ISSUER
 
 HEX_DELIMITER = ":"
 
@@ -45,3 +45,27 @@ def lookupResponse(sw1, sw2):
         code = generalize(code)
 
     return None
+
+
+def lookupChipType(chip):
+    chip = hexify(chip)
+    if chip in CHIP_TYPE.keys():
+        return CHIP_TYPE[chip]
+    
+    return "N/A"
+
+
+def lookupStandard(standard):
+    standard = hexify(standard)
+    if standard in APPLICATION:
+        return APPLICATION[standard]
+    
+    return "N/A"
+
+
+def lookupIssuer(issuer):
+    issuer = hexify(issuer)
+    if issuer in SOFTWARE_ISSUER:
+        return SOFTWARE_ISSUER[issuer]
+    
+    return "N/A"

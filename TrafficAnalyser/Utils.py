@@ -7,12 +7,16 @@ HEX_DELIMITER = ":"
 
 
 def hexify(data) -> str:
-    if data != "":
-        data = data.hex()
-
-        if len(data) > 2:
-            original = data
-            data = HEX_DELIMITER.join(str(original[i:i+2]) for i in range(0, len(original), 2))
+    if data == "":
+        return data
+        
+    if all([byte == 0 for byte in data]) and len(data) >= 5:
+        return f"[00] * {len(data)}"
+    
+    data = data.hex()
+    if len(data) > 2:
+        original = data
+        data = HEX_DELIMITER.join(str(original[i:i+2]) for i in range(0, len(original), 2))
 
     return data
 

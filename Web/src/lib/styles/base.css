@@ -1,0 +1,148 @@
+/*	base reset ----------------------------- */
+html {
+	font-size: 100%;
+	-webkit-text-size-adjust: 100%;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+	box-sizing: border-box;
+	border-collapse: collapse;
+}
+
+html,
+body {
+	height: 100%;
+	width: 100%;
+}
+
+:root {
+	--quint-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body {
+	font-size: 1.6rem;
+	font-family: 'Overpass', sans-serif;
+	line-height: 1.618;
+	color: var(--color-text);
+	background-color: white;
+	width: 100%;
+	tab-size: 2;
+	-moz-tab-size: 2;
+}
+
+* {
+	box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+	-webkit-tap-highlight-color: hsla(12, 94%, 62%, 0.1);
+
+	transition: 0.5s var(--quint-out);
+	transition-property: background, background-color, background-image, border;
+}
+
+*:focus-visible {
+	outline: 2px solid hsla(var(--sk-theme-1-hsl), 0.6);
+	transition: 0.1s ease;
+}
+
+p,
+ul,
+ol {
+	margin: 1em 0;
+}
+
+a {
+	position: relative;
+	text-decoration: none;
+	cursor: pointer;
+	color: inherit;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h6 {
+	font-size: var(1.3rem);
+}
+h5 {
+	font-size: var(1.6rem);
+}
+h4 {
+	font-size: var(2rem);
+}
+h3 {
+	font-size: var(2.4rem);
+}
+h2 {
+	font-size: var(3rem);
+}
+h1 {
+	font-size: var(3.6rem);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+	position: relative;
+	font-weight: 400;
+	line-height: 1.35;
+	color: var(--color-text);
+	text-align: center;
+}
+
+strong {
+	font-weight: 600;
+}
+
+pre {
+	overflow-x: auto;
+	top: 0;
+	white-space: inherit;
+	background-color: transparent;
+	padding: 0;
+	margin: 0;
+	top: 0;
+	background: transparent;
+}
+
+/*  buttons -------------------------------- */
+button {
+	font-family: inherit;
+	font-size: inherit;
+	background-color: transparent;
+	border: none;
+	color: currentColor;
+	cursor: pointer;
+}
+
+button[disabled] {
+	opacity: 0.55;
+	pointer-events: none;
+}
+
+button > svg {
+	position: relative;
+	top: -0.1rem;
+	width: 2rem !important;
+	height: 2rem !important;
+	stroke: currentColor !important;
+}
+
+/*  links ------------------------------------- */
+a {
+	position: relative;
+	padding: 0 0 1px 0;
+	color: var(--color-theme-1);
+}
+
+/*  tables --------------------------------- */
+table {
+	width: 100%;
+	font-size: var(--text-s);
+}
+
+td,
+th {
+	text-align: left;
+	border-bottom: 1px solid #eee;
+	padding: 0.4rem 0.8rem 0.4rem 0;
+}

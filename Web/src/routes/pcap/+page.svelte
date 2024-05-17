@@ -3,7 +3,13 @@
 
 	/** @type {import('./$types').PageData} */
 	export let data;
-	let selected;
+	let selectedFile;
+
+	function loadPcapFile() {
+		if (selectedFile !== "") {
+			window.location.href = `view?filename=${selectedFile}`;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -14,11 +20,11 @@
 	<p>Uploading is not supported. Add .pcap files manually to the server.</p>
 
 	<Label>
-		<Select items={data.pcapItems} bind:value={selected} placeholder="Choose a .pcap file to load..." />
+		<Select items={data.pcapItems} bind:value={selectedFile} placeholder="Choose a .pcap file to load..." />
 	</Label>
 
 	<div class="load-button-container">
-		<Button>Load</Button>
+		<Button on:click={loadPcapFile}>Load</Button>
 	</div>
 </section>
 

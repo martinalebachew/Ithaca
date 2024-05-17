@@ -1,4 +1,5 @@
 <script>
+	import '../app.css';
 	import '$lib/styles/index.css';
 	import { Nav } from '$lib/nav';
 </script>

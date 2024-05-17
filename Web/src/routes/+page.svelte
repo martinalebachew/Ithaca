@@ -6,7 +6,7 @@
 </svelte:head>
 
 <section>
-	<h1>Ithaca Web Portal // RavKav Research</h1>
+	<h3><strong>Ithaca Web Portal</strong> | RavKav Research</h3>
 	<p>Choose an operation mode from the menu above.</p>
 	
 	<img src={RavKavImage} alt="RavKav" />

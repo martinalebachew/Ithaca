@@ -13,7 +13,7 @@ def disableOutputAltering() -> None:
 
 
 def encodeLength(data: bytes) -> bytes:
-  return struct.pack('@I', len(data))
+  return struct.pack('>I', len(data))
 
 
 def out(data: bytes) -> None:

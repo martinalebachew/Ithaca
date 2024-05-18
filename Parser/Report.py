@@ -2,10 +2,40 @@
 # (C) Martin Alebachew, 2023
 
 from fpdf import FPDF
-from Shared import VERSION, HEADERS, TABLE_WIDTH, INSTRUCTIONS, RESPONSE_COLOR, COLOR_SCHEME
+from Shared import VERSION, INSTRUCTIONS
 from Packets import HostToCardPacket, CardToHostPacket
 from Utils import hexify, lookupResponse
 from ATR import ATRInformation
+
+
+TABLE_WIDTH = 190
+
+HEADERS = {
+    "CardToHost": {
+        "titles": ["NO", "DIR", "Data", "SW1", "SW2"],
+        "widths": [(size * 100 / TABLE_WIDTH) for size in (15, 12, 143, 10, 10)]
+    },
+
+    "HostToCard": {
+        "titles": ["NO", "DIR", "CLA", "INS", "P1", "P2", "Lc", "Data", "Le"],
+        "widths": [(size * 100 / TABLE_WIDTH) for size in (15, 12, 10, 10, 10, 10, 10, 103, 10)]
+    }
+}
+
+RESPONSE_COLOR = {
+    "Unknown": "BLACK",
+    "Success": "GREEN",
+    "Info": "BLACK",
+    "Warning": "YELLOW",
+    "Error": "RED",
+}
+
+COLOR_SCHEME = {
+    "BLACK": (0, 0, 0),
+    "GREEN": (93, 187, 99),
+    "RED": (220, 40, 40),
+    "YELLOW": (255, 191, 0)
+}
 
 
 class Report:

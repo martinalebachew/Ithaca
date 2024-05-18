@@ -1,35 +1,7 @@
 # Shared.py
 # (C) Martin Alebachew, 2023
 
-VERSION = "1.0.0"
-TABLE_WIDTH = 190
-
-HEADERS = {
-    "CardToHost": {
-        "titles": ["NO", "DIR", "Data", "SW1", "SW2"],
-        "widths": [(size * 100 / TABLE_WIDTH) for size in (15, 12, 143, 10, 10)]
-    },
-
-    "HostToCard": {
-        "titles": ["NO", "DIR", "CLA", "INS", "P1", "P2", "Lc", "Data", "Le"],
-        "widths": [(size * 100 / TABLE_WIDTH) for size in (15, 12, 10, 10, 10, 10, 10, 103, 10)]
-    }
-}
-
-RESPONSE_COLOR = {
-    "Unknown": "BLACK",
-    "Success": "GREEN",
-    "Info": "BLACK",
-    "Warning": "YELLOW",
-    "Error": "RED",
-}
-
-COLOR_SCHEME = {
-    "BLACK": (0, 0, 0),
-    "GREEN": (93, 187, 99),
-    "RED": (220, 40, 40),
-    "YELLOW": (255, 191, 0)
-}
+VERSION = "2.0.0"
 
 # https://github.com/elafargue/smart-tools/blob/master/atr/lib/calypso-xplore.html
 CHIP_TYPE = {
@@ -224,7 +196,7 @@ RESPONSES = {
     "6996": "[Error] Data must be updated again",
     "69E1": "[Error] POL1 of the currently Enabled Profile prevents this action",
     "69F0": "[Error] Permission Denied",
-    "69F1": "[Error] Permission Denied – Missing Privilege",
+    "69F1": "[Error] Permission Denied - Missing Privilege",
     "69FX": "[Error] Unknown",
     "69XX": "[Error] RFU",
     "6A——": "[Error] Wrong parameter(s) P1-P2",
@@ -256,7 +228,7 @@ RESPONSES = {
     "6E00": "[Error] Class not supported",
     "6EXX": "[Error] Instruction class not supported (procedure byte), (ISO 7816-3)",
     "6F——": "[Error] Internal exception",
-    "6F00": "[Error] Command aborted – more exact diagnosis not possible (e.g., operating system error)",
+    "6F00": "[Error] Command aborted - more exact diagnosis not possible (e.g., operating system error)",
     "6FFF": "[Error] Card dead (overuse, …)",
     "6FXX": "[Error] No precise diagnosis (procedure byte), (ISO 7816-3)",
     "9000": "[Success] OK",
@@ -298,7 +270,7 @@ RESPONSES = {
     "9402": "[Error] Candidate amount too high / Address range exceeded",
     "9403": "[Error] Candidate amount too low",
     "9404": "[Error] FID not found, record not found or comparison pattern not found",
-    "9405": "[]Error Problems in the data field",
+    "9405": "[Error] Problems in the data field",
     "9406": "[Error] Required MAC unavailable",
     "9407": "[Error] Bad currency: purse engine has no slot with R3bc currency",
     "9408": "[Error] Selected file type does not match command / R3bc currency not supported in purse engine",
@@ -308,10 +280,10 @@ RESPONSES = {
     "9702": "[Error] Main keys are blocked",
     "9704": "[Error] PIN not successfully verified, 3 or more PIN tries left",
     "9784": "[Error] Base key",
-    "9785": "[Error] Limit exceeded – C-MAC key",
-    "9786": "[Error] SM error – Limit exceeded – R-MAC key",
-    "9787": "[Error] Limit exceeded – sequence counter",
-    "9788": "[Error] Limit exceeded – R-MAC length",
+    "9785": "[Error] Limit exceeded - C-MAC key",
+    "9786": "[Error] SM error - Limit exceeded - R-MAC key",
+    "9787": "[Error] Limit exceeded - sequence counter",
+    "9788": "[Error] Limit exceeded - R-MAC length",
     "9789": "[Error] Service not available",
     "9802": "[Error] No PIN defined",
     "9804": "[Error] Access conditions not satisfied, authentication failed",
@@ -321,14 +293,14 @@ RESPONSES = {
     "9862": "[Error] Authentication Error, application specific (incorrect MAC)",
     "9900": "[Error] 1 PIN try left",
     "9904": "[Error] PIN not successfully verified, 1 PIN try left",
-    "9985": "[Error] Wrong status – Cardholder lock",
+    "9985": "[Error] Wrong status - Cardholder lock",
     "9986": "[Error] Missing privilege",
     "9987": "[Error] PIN is not installed",
-    "9988": "[Error] Wrong status – R-MAC state",
+    "9988": "[Error] Wrong status - R-MAC state",
     "9A00": "[Error] 2 PIN try left",
     "9A04": "[Error] PIN not successfully verified, 2 PIN try left",
-    "9A71": "[Error] Wrong parameter value – Double agent AID",
-    "9A72": "[Error] Wrong parameter value – Double agent Type",
+    "9A71": "[Error] Wrong parameter value - Double agent AID",
+    "9A72": "[Error] Wrong parameter value - Double agent Type",
     "9D05": "[Error] Incorrect certificate type",
     "9D07": "[Error] Incorrect session data size",
     "9D08": "[Error] Incorrect DIR file record size",

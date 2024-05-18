@@ -3,11 +3,14 @@
 
 	/** @type {import('./$types').PageData} */
 	export let data;
+  let packets = [];
 
   onMount(() => {
     if (!data.isFilenameValid) {
       window.location.href = "pcap";
     }
+
+    packets = JSON.parse(data.packetsJson);
   });
 </script>
 
@@ -19,6 +22,9 @@
     <h3><strong>Pcap Viewer</strong> | {data.filename}</h3>
   </section>
 {/if}
+
+{#each packets as packet}
+{/each}
 
 <style>
 	section {

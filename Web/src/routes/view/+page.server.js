@@ -1,4 +1,5 @@
 import { isParamValid } from '$lib/helpers/shared/params';
+import { parsePcapFile } from '$lib/helpers/server/bridge';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, url }) {
@@ -10,13 +11,10 @@ export async function load({ params, url }) {
 			filename: filename
 		};
 	}
-	
-	/*
-	 * TODO: Communicate with parser
-	 */
 
 	return {
 		isFilenameValid: true,
-		filename: filename
+		filename: filename,
+		packetsJson: JSON.stringify(parsePcapFile(filename))
 	}
 }

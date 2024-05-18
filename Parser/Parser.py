@@ -29,6 +29,7 @@ def main():
         packets = parsePackets(args.filename)
     except:
         out(encodeParsingError())
+        exit()
     
     encoded = encodePackets(packets)
     out(encoded)

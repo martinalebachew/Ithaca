@@ -5,7 +5,6 @@ import sys
 import struct
 
 LENGTH_SIZE = 4
-LENGTH_ENDIANNESS = "little"
 
 
 def disableOutputAltering() -> None:

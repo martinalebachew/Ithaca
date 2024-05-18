@@ -5,7 +5,7 @@
 	export let data;
 
   onMount(() => {
-    if (data.filename === null || data.filename === "") {
+    if (!data.isFilenameValid) {
       window.location.href = "pcap";
     }
   });
@@ -14,7 +14,7 @@
 <svelte:head>
 </svelte:head>
 
-{#if data.filename !== null && data.filename !== ""}
+{#if data.isFilenameValid}
   <section>
     <h3><strong>Pcap Viewer</strong> | {data.filename}</h3>
   </section>

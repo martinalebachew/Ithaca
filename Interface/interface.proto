@@ -1,5 +1,4 @@
-// Parser interface
-// v1.0.0
+// Parser Interface v3.1
 
 syntax = "proto3";
 
@@ -10,7 +9,7 @@ message ATRResponse {
   string file_structure = 4;
   string software_issuer = 5;
   string software_version = 6;
-  string low_serial = 7;
+  string lower_serial = 7;
 }
 
 message CommandPacket {
@@ -31,9 +30,8 @@ message ResponsePacket {
   bytes data = 2;
   uint32 sw1 = 3;
   uint32 sw2 = 4;
-  bool is_known_response = 5;
-  bool status = 6;
-  string description = 7;
+  string status = 5;
+  string description = 6;
 }
 
 message PcapParseRequest {
@@ -42,7 +40,7 @@ message PcapParseRequest {
 
 message PcapParseResponse {
   bool status = 1;
-  ATRResponse atr_response = 2;
+  optional ATRResponse atr_response = 2;
   repeated CommandPacket commands = 3;
   repeated ResponsePacket responses = 4;
 }

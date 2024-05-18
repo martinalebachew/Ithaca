@@ -163,4 +163,4 @@ cython_debug/
 .idea/
 
 # Interface bridge
-python-bridge/
+python_bridge/

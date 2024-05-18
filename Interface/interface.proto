@@ -1,0 +1,48 @@
+// Parser interface
+// v1.0.0
+
+syntax = "proto3";
+
+message ATRResponse {
+  bytes raw_atr = 1;
+  string chip = 2;
+  string standard = 3;
+  string file_structure = 4;
+  string software_issuer = 5;
+  string software_version = 6;
+  string low_serial = 7;
+}
+
+message CommandPacket {
+  uint32 pcap_index = 1;
+  uint32 cla = 2;
+  uint32 ins = 3;
+  uint32 p1 = 4;
+  uint32 p2 = 5;
+  uint32 lc = 6;
+  bytes data = 7;
+  uint32 le = 8;
+  bool is_known_command = 9;
+  string description = 10;
+}
+
+message ResponsePacket {
+  uint32 pcap_index = 1;
+  bytes data = 2;
+  uint32 sw1 = 3;
+  uint32 sw2 = 4;
+  bool is_known_response = 5;
+  bool status = 6;
+  string description = 7;
+}
+
+message PcapParseRequest {
+  string filename = 1;
+}
+
+message PcapParseResponse {
+  bool status = 1;
+  ATRResponse atr_response = 2;
+  repeated CommandPacket commands = 3;
+  repeated ResponsePacket responses = 4;
+}

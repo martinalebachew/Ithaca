@@ -1,45 +1,41 @@
-// Parser Interface v3.1
+// Parser Interface v3.2
 
 syntax = "proto3";
 
 message ATRResponse {
-  bytes raw_atr = 1;
-  string chip = 2;
-  string standard = 3;
-  string file_structure = 4;
-  string software_issuer = 5;
-  string software_version = 6;
-  string lower_serial = 7;
+  optional bytes raw_atr = 1;
+  optional string chip = 2;
+  optional string standard = 3;
+  optional string file_structure = 4;
+  optional string software_issuer = 5;
+  optional string software_version = 6;
+  optional string lower_serial = 7;
 }
 
 message CommandPacket {
-  uint32 pcap_index = 1;
-  uint32 cla = 2;
-  uint32 ins = 3;
-  uint32 p1 = 4;
-  uint32 p2 = 5;
-  uint32 lc = 6;
-  bytes data = 7;
-  uint32 le = 8;
-  bool is_known_command = 9;
-  string description = 10;
+  optional uint32 pcap_index = 1;
+  optional uint32 cla = 2;
+  optional uint32 ins = 3;
+  optional uint32 p1 = 4;
+  optional uint32 p2 = 5;
+  optional uint32 lc = 6;
+  optional bytes data = 7;
+  optional uint32 le = 8;
+  optional bool is_known_command = 9;
+  optional string description = 10;
 }
 
 message ResponsePacket {
-  uint32 pcap_index = 1;
-  bytes data = 2;
-  uint32 sw1 = 3;
-  uint32 sw2 = 4;
-  string status = 5;
-  string description = 6;
-}
-
-message PcapParseRequest {
-  string filename = 1;
+  optional uint32 pcap_index = 1;
+  optional bytes data = 2;
+  optional uint32 sw1 = 3;
+  optional uint32 sw2 = 4;
+  optional string status = 5;
+  optional string description = 6;
 }
 
 message PcapParseResponse {
-  bool status = 1;
+  optional bool status = 1;
   optional ATRResponse atr_response = 2;
   repeated CommandPacket commands = 3;
   repeated ResponsePacket responses = 4;

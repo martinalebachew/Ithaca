@@ -3,7 +3,7 @@ import { parsePcapFile } from '$lib/helpers/server/bridge';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, url }) {
-	let filename = url.searchParams.get('filename');
+	const filename = url.searchParams.get('filename');
 
 	if (!isParamValid(filename)) {
 		return {
@@ -12,9 +12,12 @@ export async function load({ params, url }) {
 		};
 	}
 
+	const [commands, responses] = parsePcapFile(filename);
+
 	return {
 		isFilenameValid: true,
 		filename: filename,
-		packetsJson: JSON.stringify(parsePcapFile(filename))
+		commandsJson: JSON.stringify(commands),
+		responsesJson: JSON.stringify(responses)
 	}
 }

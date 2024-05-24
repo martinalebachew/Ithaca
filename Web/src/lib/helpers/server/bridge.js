@@ -5,6 +5,8 @@ import { runCommand } from '$lib/helpers/server/subprocess';
 const protobuf = protobuf_container.default;
 const bridge = protobuf.loadSync(`${env.CODE_ROOT_PATH}/Interface/interface.proto`);
 const PcapParseResponse = bridge.lookupType("PcapParseResponse");
+const CommandPacket = bridge.lookupType("CommandPacket");
+const ResponsePacket = bridge.lookupType("ResponsePacket");
 
 const PARSER_PREFIX = `python3 ${env.CODE_ROOT_PATH}/Parser/Parser.py`;
 const LENGTH_SIZE = 4;
@@ -31,7 +33,5 @@ export function parsePcapFile(filename) {
   const response = PcapParseResponse.decode(rawResponse);
   if (!response.status) return;
 
-  let packets = response.commands.concat(response.responses);
-  packets = packets.sort((packet1, packet2) => (packet1.pcapIndex - packet2.pcapIndex));
-  return packets;
+  return [response.commands, response.responses];
 }

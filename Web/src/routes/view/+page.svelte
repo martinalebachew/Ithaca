@@ -1,5 +1,7 @@
 <script>
   import { onMount } from 'svelte';
+  import CommandPacket from '$lib/packets/CommandPacket.svelte';
+    import ResponsePacket from '$lib/packets/ResponsePacket.svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -10,7 +12,21 @@
       window.location.href = "pcap";
     }
 
-    packets = JSON.parse(data.packetsJson);
+    const commands = JSON.parse(data.commandsJson);
+    const responses = JSON.parse(data.responsesJson);
+
+    for (let command of commands) {
+      command.type = "CommandPacket";
+      packets.push(command);
+    }
+
+    for (let response of responses) {
+      response.type = "ResponsePacket";
+      packets.push(response);
+    }
+
+    packets.sort((packet1, packet2) => (packet1.pcapIndex - packet2.pcapIndex));
+    packets = packets; // Svelte reactivity
   });
 </script>
 
@@ -24,6 +40,11 @@
 {/if}
 
 {#each packets as packet}
+{#if packet.type === "CommandPacket"}
+<CommandPacket packet={packet} />
+{:else if packet.type === "ResponsePacket"}
+<ResponsePacket packet={packet} />
+{/if}
 {/each}
 
 <style>

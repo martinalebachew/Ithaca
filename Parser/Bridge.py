@@ -1,66 +1,59 @@
 # Bridge.py
 # (C) Martin Alebachew, 2023
 
-import python_bridge.interface_pb2 as interface
-from Packets import HostToCardPacket, CardToHostPacket
-from Shared import INSTRUCTIONS
-from Utils import hexify, lookupResponse
+from typing import List
 from ATR import ATRInformation
+from Datagrams import Command, Response
+from Utils import get_command_notes, get_response_notes
+import python_bridge.interface_pb2 as interface
 
 
-# TODO: Generalize packet classes, do conversions in report code
+def build_command(datagram: Command) -> interface.Command:
+    command = interface.Command()
+    command.pcap_index = datagram.index
 
-def buildCommand(packet) -> interface.CommandPacket:
-  command = interface.CommandPacket()
-  command.pcap_index = int(packet.no)
-  
-  command.cla = packet.cla[0]
-  command.ins = packet.ins[0]
-  command.p1 = packet.p1[0]
-  command.p2 = packet.p2[0]
-  
-  if len(packet.lc) > 0:
-    command.lc = packet.lc[0]
+    command.cla = datagram.cla
+    command.ins = datagram.ins
+    command.p1 = datagram.p1
+    command.p2 = datagram.p2
+
+    if datagram.lc is not None:
+        command.lc = datagram.lc
+        
+    if datagram.le is not None:
+        command.le = datagram.le
     
-  if len(packet.le) > 0:
-    command.le = packet.le[0]
-  
-  if len(packet.data) > 0:
-    command.data = packet.data
-  
-  # TODO: Avoid duplication with report
-  if hexify(packet.ins) in INSTRUCTIONS.keys():
-    command.is_known_command = True
-    command.description = INSTRUCTIONS[hexify(packet.ins)] + (" (PROPRIETARY)" if packet.cla != b'\x00' else " (ISO/IEC 7816)")
-  else:
-    command.is_known_command = False
-  
-  return command
+    if datagram.data is not None:
+        command.data = datagram.data
+
+    (found, notes) = get_command_notes(datagram)
+    command.is_known_command = found
+    command.description = notes
+
+    return command
 
 
-def buildResponse(packet) -> interface.ResponsePacket:
-  response = interface.ResponsePacket()
-  
-  response.pcap_index = int(packet.no)
-  
-  if len(packet.data) > 0:
-    response.data = packet.data
+def build_response(datagram: Response) -> interface.Response:
+    response = interface.Response()
+
+    response.pcap_index = datagram.index
+    response.sw1 = datagram.sw1
+    response.sw2 = datagram.sw2
+
+    if datagram.data is not None:
+        response.data = datagram.data
     
-  response.sw1 = packet.sw1[0]
-  response.sw2 = packet.sw2[0]
-  
-  response.description = description = lookupResponse(packet.sw1, packet.sw2)
-  response.status = description[description.find("[") + 1:description.find("]")] if description else "Error"
+    (response.status, response.description) = get_response_notes(datagram)
 
-  return response
+    return response
 
 
-def buildATR(packet) -> interface.ATRResponse:
+def build_atr(datagram: Response) -> interface.ATRResponse:
   atr = interface.ATRResponse()
   
-  if packet.data != "":
-    info = ATRInformation(packet)
-    atr.raw_atr = packet.data
+  if datagram.data != "":
+    info = ATRInformation(datagram)
+    atr.raw_atr = datagram.data
     
     atr.chip = info.chip
     atr.standard = info.standard
@@ -72,25 +65,25 @@ def buildATR(packet) -> interface.ATRResponse:
   return atr
 
 
-def encodePackets(packets) -> bytes:
-  response = interface.PcapParseResponse()
-  response.status = True
-  
-  response.atr_response.CopyFrom(buildATR(packets[0]))
-  
-  # TODO: Allow no-ATR / not first
-  for packet in packets[1:]:
-    if isinstance(packet, HostToCardPacket):
-      response.commands.append(buildCommand(packet))
-    elif isinstance(packet, CardToHostPacket):
-      response.responses.append(buildResponse(packet))      
-    else:
-      raise ValueError("Unknown packet.")
-  
-  return response.SerializeToString()
+def encode_datagrams(datagrams: List[Command | Response]) -> bytes:
+    response = interface.PcapParseResponse()
+    response.status = True
+    
+    # TODO: Allow no-ATR / not first
+    response.atr_response.CopyFrom(build_atr(datagrams[0]))
+    
+    for datagram in datagrams[1:]:
+        if isinstance(datagram, Command):
+            response.commands.append(build_command(datagram))
+        elif isinstance(datagram, Response):
+            response.responses.append(build_response(datagram))      
+        else:
+            raise TypeError("Unknown datagram type!")
+    
+    return response.SerializeToString()
 
 
-def encodeParsingError() -> bytes:
-  response = interface.PcapParseResponse()
-  response.status = False
-  return response.SerializeToString()
+def encode_parsing_error() -> bytes:
+    response = interface.PcapParseResponse()
+    response.status = False
+    return response.SerializeToString()

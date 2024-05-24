@@ -1,75 +1,113 @@
 # Utils.py
 # (C) Martin Alebachew, 2023
 
-from Shared import RESPONSES, CHIP_TYPE, APPLICATION, SOFTWARE_ISSUER
+from re import search
+from typing import Tuple
+from itertools import zip_longest
+from Datagrams import Command, Response
+from Shared import CardMetadata, Calypso, Preferences
 
-HEX_DELIMITER = ":"
+
+def grouper(iterable, n, *, incomplete="fill", fillvalue=None):
+    "Collect data into non-overlapping fixed-length chunks or blocks."
+    # grouper("ABCDEFG", 3, fillvalue="x") → ABC DEF Gxx
+    # grouper("ABCDEFG", 3, incomplete="strict") → ABC DEF ValueError
+    # grouper("ABCDEFG", 3, incomplete="ignore") → ABC DEF
+    iterators = [iter(iterable)] * n
+    match incomplete:
+        case "fill":
+            return zip_longest(*iterators, fillvalue=fillvalue)
+        case "strict":
+            return zip(*iterators, strict=True)
+        case "ignore":
+            return zip(*iterators)
+        case _:
+            raise ValueError("Expected fill, strict, or ignore")
 
 
-def hexify(data) -> str:
-    if data == "":
-        return data
-        
-    if all([byte == 0 for byte in data]) and len(data) >= 5:
-        return f"[00] * {len(data)}"
+def hexify(data: bytes | int | None) -> str:
+    if (data is None) or (data == b""):
+        return ""
     
-    data = data.hex()
-    if len(data) > 2:
-        original = data
-        data = HEX_DELIMITER.join(str(original[i:i+2]) for i in range(0, len(original), 2))
-
+    if isinstance(data, int):
+        data = data.to_bytes(1, "little")
+    else:
+        is_data_compressable = all((byte == data[0] for byte in data))
+        is_data_compact = (len(data) <= max(Preferences.COMPACT_HEX_MAX_LENGTH, 1))
+        if is_data_compressable and not is_data_compact:
+            return f"[{hexify(data[0])}] * {len(data)}"
+    
+    # TODO: Replace with lighter logic
+    data = grouper(data.hex(), 2, incomplete="strict")
+    data = [''.join(number_digits) for number_digits in data]
+    data = Preferences.HEX_DELIMITER.join(data)
     return data
 
 
-def generalize(code):
-    if code is None or len(code) != 4:
+def generalize_response_code(code: str) -> str | None:
+    if len(code) != 4:
+        raise ValueError("Unknown response code format!")
+
+    if (code[2:4] == "——") or (code[1:4] == "XXX"):
         return None
 
-    if code[2:4] == "——":
-        return None
-
-    if code[1:4] == "XXX":
-        return None
-
-    code = code.replace("X", "")
-    code = code[:-1]
+    code = code.replace("X", "")[:-1]
     code += "X" * (4 - len(code))
     return code
 
 
-def lookupResponse(sw1, sw2):
+def lookup_response_code(sw1: int, sw2: int) -> str | None:
     sw1 = hexify(sw1)
     sw2 = hexify(sw2)
     code = (sw1 + sw2 if sw2 else sw1 + "——").upper()
 
-    # Generalize code until found in responses
     while code is not None:
-        if code in RESPONSES.keys():
-            return RESPONSES[code]
-        code = generalize(code)
+        if code in Calypso.RESPONSE_CODES:
+            return Calypso.RESPONSE_CODES[code]
+        code = generalize_response_code(code)
 
     return None
 
 
-def lookupChipType(chip):
+def lookup_chip_type(chip: int) -> str:
     chip = hexify(chip)
-    if chip in CHIP_TYPE.keys():
-        return CHIP_TYPE[chip]
+    if chip in CardMetadata.CHIP_TYPE:
+        return CardMetadata.CHIP_TYPE[chip]
     
     return "N/A"
 
 
-def lookupStandard(standard):
+def lookup_standard(standard: int) -> str:
     standard = hexify(standard)
-    if standard in APPLICATION:
-        return APPLICATION[standard]
+    if standard in CardMetadata.APPLICATION:
+        return CardMetadata.APPLICATION[standard]
     
     return "N/A"
 
 
-def lookupIssuer(issuer):
+def lookup_issuer(issuer: int) -> str:
     issuer = hexify(issuer)
-    if issuer in SOFTWARE_ISSUER:
-        return SOFTWARE_ISSUER[issuer]
+    if issuer in CardMetadata.SOFTWARE_ISSUER:
+        return CardMetadata.SOFTWARE_ISSUER[issuer]
     
     return "N/A"
+
+
+def get_command_notes(datagram: Command) -> Tuple[bool, str]:
+    if hexify(datagram.ins) in Calypso.INSTRUCTION_CODES:
+        instruction_text = Calypso.INSTRUCTION_CODES[hexify(datagram.ins)]
+        instruction_source = "PROPRIETARY" if datagram.cla != b'\x00' else "ISO/IEC 7816"
+        text = f"{instruction_text} ({instruction_source})"
+        return (True, text)
+
+    return (False, "Failed to analyse proprietary instruction!")
+
+
+def get_response_notes(datagram: Response) -> Tuple[str, str]:
+    response_text = lookup_response_code(datagram.sw1, datagram.sw2)
+    status = search(Calypso.RESPONSE_STATUS_REGEX, response_text)[0]
+    
+    if status is None:
+        status = "Error"
+    
+    return (status, response_text)

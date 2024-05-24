@@ -7,16 +7,13 @@ import struct
 LENGTH_SIZE = 4
 
 
-def disableOutputAltering() -> None:
-  # TODO: Make sure Windows does not replace /n with /r/n
-  pass
-
-
-def encodeLength(data: bytes) -> bytes:
-  return struct.pack('>I', len(data))
+def encode_length(data: bytes) -> bytes:
+    return struct.pack('>I', len(data))
 
 
 def out(data: bytes) -> None:
-  disableOutputAltering()
-  sys.stdout.buffer.write(encodeLength(data))
-  sys.stdout.buffer.write(data)
+    # Note: using print will make alterations to the
+    # output, for example replacing /n with /r/n on
+    # Windows systems.
+    sys.stdout.buffer.write(encode_length(data))
+    sys.stdout.buffer.write(data)

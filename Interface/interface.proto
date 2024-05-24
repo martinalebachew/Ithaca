@@ -1,4 +1,4 @@
-// Parser Interface v3.2
+// Parser Interface v4.0
 
 syntax = "proto3";
 
@@ -12,7 +12,7 @@ message ATRResponse {
   optional string lower_serial = 7;
 }
 
-message CommandPacket {
+message Command {
   optional uint32 pcap_index = 1;
   optional uint32 cla = 2;
   optional uint32 ins = 3;
@@ -25,7 +25,7 @@ message CommandPacket {
   optional string description = 10;
 }
 
-message ResponsePacket {
+message Response {
   optional uint32 pcap_index = 1;
   optional bytes data = 2;
   optional uint32 sw1 = 3;
@@ -37,6 +37,6 @@ message ResponsePacket {
 message PcapParseResponse {
   optional bool status = 1;
   optional ATRResponse atr_response = 2;
-  repeated CommandPacket commands = 3;
-  repeated ResponsePacket responses = 4;
+  repeated Command commands = 3;
+  repeated Response responses = 4;
 }

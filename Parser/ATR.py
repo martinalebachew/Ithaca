@@ -1,34 +1,36 @@
 # ATR.py
 # (C) Martin Alebachew, 2024
 
-from Packets import CardToHostPacket
-from Utils import hexify, lookupChipType, lookupStandard, lookupIssuer
+from Datagrams import Response
+from Utils import hexify, lookup_chip_type, lookup_standard, lookup_issuer
 
 
 class ATRInformation:
-    def __init__(self, ATRPacket):
-        if not isinstance(ATRPacket, CardToHostPacket):
-            raise "Invalid ATR packet!"
+    def __init__(self, atr_packet: Response):
+        if not isinstance(atr_packet, Response):
+            raise TypeError("Invalid ATR packet!")
+        
+        atr_data = atr_packet.data
+        if len(atr_data) != 17:
+            raise ValueError("Invalid ATR data size!")
 
-        ATRData = ATRPacket.data
-        historical_bytes = ATRData[4:]
-
-        # Note: using single-byte arrays to disable int conversion
+        historical_bytes = atr_data[4:]
         
-        self.rawATR = hexify(ATRData)
+        self.raw_atr = hexify(atr_data)
         
-        self.chip = historical_bytes[2:3]
-        self.chip = f"{lookupChipType(self.chip)} ({hexify(self.chip)})"
+        raw_chip = historical_bytes[2]
+        self.chip = f"{lookup_chip_type(raw_chip)} ({hexify(raw_chip)})"
         
-        self.standard = historical_bytes[3:4]
-        self.standard = f"{lookupStandard(self.standard)} ({hexify(self.standard)})"
+        raw_standard = historical_bytes[3]
+        self.standard = f"{lookup_standard(raw_standard)} ({hexify(raw_standard)})"
         
         self.file_structure = f"#{historical_bytes[4]}"
         
-        self.software_issuer = historical_bytes[5:6]
-        self.software_issuer = f"{lookupIssuer(self.software_issuer)} ({hexify(self.software_issuer)})"
+        raw_issuer = historical_bytes[5]
+        self.software_issuer = f"{lookup_issuer(raw_issuer)} ({hexify(raw_issuer)})"
         
         self.software_version = f"{hexify(historical_bytes[6:8])} (ROM, EEPROM)"
         
-        self.lower_serial = historical_bytes[8:12]
-        self.lower_serial = f"{int.from_bytes(self.lower_serial, byteorder='big')} ({hexify(self.lower_serial)})"
+        raw_serial = historical_bytes[8:12]
+        parsed_serial = int.from_bytes(raw_serial, byteorder='big')
+        self.lower_serial = f"{parsed_serial} ({hexify(raw_serial)})"

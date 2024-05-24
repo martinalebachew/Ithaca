@@ -6,7 +6,7 @@ const protobuf = protobuf_container.default;
 const bridge = protobuf.loadSync(`${env.CODE_ROOT_PATH}/Interface/interface.proto`);
 const PcapParseResponse = bridge.lookupType("PcapParseResponse");
 
-const PARSER_PREFIX = `python3 ${env.CODE_ROOT_PATH}/Parser/Parser.py`;
+const PARSER_PREFIX = `python3 ${env.CODE_ROOT_PATH}/Parser/Parser.py --filename`;
 const LENGTH_SIZE = 4;
 
 function decodeLengthBE(buffer) {

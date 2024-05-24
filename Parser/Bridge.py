@@ -19,13 +19,13 @@ def buildCommand(packet) -> interface.CommandPacket:
   command.p1 = packet.p1[0]
   command.p2 = packet.p2[0]
   
-  if packet.lc:
+  if len(packet.lc) > 0:
     command.lc = packet.lc[0]
     
-  if packet.le:
+  if len(packet.le) > 0:
     command.le = packet.le[0]
   
-  if packet.data:
+  if len(packet.data) > 0:
     command.data = packet.data
   
   # TODO: Avoid duplication with report
@@ -43,7 +43,7 @@ def buildResponse(packet) -> interface.ResponsePacket:
   
   response.pcap_index = int(packet.no)
   
-  if packet.data:
+  if len(packet.data) > 0:
     response.data = packet.data
     
   response.sw1 = packet.sw1[0]
